@@ -13,9 +13,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [issues, setIssues] = useState([])
   const [feedback, setFeedback] = useState([])
 
-  // -------------------------
-  // 🔥 FETCH ISSUES & FEEDBACK FROM SUPABASE
-  // -------------------------
+
   useEffect(() => {
     fetchIssues()
     fetchFeedback()

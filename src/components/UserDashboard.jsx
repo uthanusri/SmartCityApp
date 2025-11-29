@@ -29,7 +29,7 @@ const UserDashboard = ({ user, onLogout }) => {
     const { data, error } = await supabase
       .from("report_issues")
       .select("*")
-      .order("date", { ascending: false })
+      .order("id", { ascending: false })
 
     if (!error) setIssues(data)
   }
@@ -38,7 +38,7 @@ const UserDashboard = ({ user, onLogout }) => {
     const { data, error } = await supabase
       .from("feedback")
       .select("*")
-      .order("date", { ascending: false })
+      .order("id", { ascending: false })
 
     if (!error) setFeedback(data)
   }
@@ -51,7 +51,6 @@ const UserDashboard = ({ user, onLogout }) => {
       .from("report_issues")
       .insert([
         {
-          user_id: user.id || "guest",
           title: issueTitle,
           description: issueDescription,
           status: "pending",
@@ -77,7 +76,6 @@ const UserDashboard = ({ user, onLogout }) => {
       .from("feedback")
       .insert([
         {
-          user_id: user.id || "guest",
           amenity: feedbackAmenity,
           rating: feedbackRating,
           comment: feedbackComment,
