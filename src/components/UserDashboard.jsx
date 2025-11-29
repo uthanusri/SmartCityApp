@@ -79,7 +79,7 @@ const UserDashboard = ({ user, onLogout }) => {
           amenity: feedbackAmenity,
           rating: feedbackRating,
           comment: feedbackComment,
-          created_at: new Date().toISOString()
+          
         }
       ])
 
