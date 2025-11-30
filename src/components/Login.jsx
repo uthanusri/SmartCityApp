@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../styles/Login.css'
 
 const Login = ({ onLogin }) => {
@@ -6,10 +6,30 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setError('')
+  // CAPTCHA STATES
+  const [captcha, setCaptcha] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [userInput, setUserInput] = useState("");
 
+  // Generate CAPTCHA once when page loads
+  useEffect(() => {
+    const a = Math.floor(Math.random() * 10);
+    const b = Math.floor(Math.random() * 10);
+    setCaptcha(`${a} + ${b}`);
+    setAnswer(a + b);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+
+    // CAPTCHA VALIDATION
+    if (parseInt(userInput) !== answer) {
+      alert("Captcha incorrect!");
+      return;
+    }
+
+    // LOGIN VALIDATION (unchanged)
     if (username === 'admin' && password === 'admin123') {
       onLogin({ username: 'admin', role: 'admin' })
     } else if (username === 'user' && password === 'user123') {
@@ -17,7 +37,7 @@ const Login = ({ onLogin }) => {
     } else {
       setError('Invalid username or password')
     }
-  }
+  };
 
   return (
     <div className="login-container">
@@ -28,6 +48,7 @@ const Login = ({ onLogin }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
+
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
@@ -52,6 +73,18 @@ const Login = ({ onLogin }) => {
             />
           </div>
 
+          {/* CAPTCHA SECTION ADDED */}
+          <div className="form-group">
+            <label>Captcha: Solve {captcha}</label>
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="Enter answer"
+              required
+            />
+          </div>
+
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button">
@@ -62,10 +95,11 @@ const Login = ({ onLogin }) => {
             <p><strong>Admin:</strong> admin / admin123</p>
             <p><strong>User:</strong> user / user123</p>
           </div>
+
         </form>
       </div>
     </div>
   )
 }
 
-export default Login
+export default Login;
